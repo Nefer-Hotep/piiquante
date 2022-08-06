@@ -20,13 +20,13 @@ const sauceSchema = mongoose.Schema({
   /* nombre entre 1 et 10 décrivant la sauce */
   heat: { type: Number, required: true },
   /* nombre d'utilisateurs qui aiment (= likent) la sauce */
-  likes: { type: Number, required: true },
+  likes: { type: Number, required: true, default: 0},
   /* nombre d'utilisateurs qui n'aiment pas (= dislike) la sauce */
-  dislikes: { type: Number, required: true },
+  dislikes: { type: Number, required: true, default: 0 },
   /* tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce */
-  usersLiked: { type: ["String <userId>"], required: true },
+  usersLiked: { type: [String], req: true, default: [] },
   /* tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce */
-  usersDisliked: { type: ["String <userId>"], required: true },
+  usersDisliked: { type: [String], req: true, default: [] },
 });
 
 // Exporte le schéma en utilisant la méthode .model du package mongoose;

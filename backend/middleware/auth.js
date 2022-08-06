@@ -18,8 +18,9 @@ module.exports = (req, res, next) => {
     req.auth = {
       userId: userId,
     };
+    next();
   } catch (error) {
     // Récupère l'erreur avec un statut 401 + erreur.
-    res.status(401).json({ error });
+    res.status(403).json({ error });/* ???? 403:unauthorized request */ 
   }
 };

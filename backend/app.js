@@ -11,6 +11,8 @@ const mongoose = require("mongoose");
 const saucesRoutes = require("./routes/sauces");
 // Importe le router de user.js
 const userRoutes = require("./routes/user");
+// ????
+const path = require('path');
 
 // Indique à app d'utiliser express.
 const app = express();
@@ -50,6 +52,8 @@ app.use(express.json());
 app.use("/api/sauces", saucesRoutes);
 // Racine des routes d'authentification
 app.use("/api/auth", userRoutes);
+// Route de gestion des fichiers statique
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 // Export app pour y accéder depuis les autres fichiers.
 module.exports = app;

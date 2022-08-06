@@ -17,9 +17,9 @@ const saucesCtrl = require("../controllers/sauces");
 // Create Read Update Delete
 
 // Create
-
+router.post("/", auth, multer, saucesCtrl.createSauce);
 // Read (One)
-
+router.get("/:id", auth, saucesCtrl.getOneSauce);
 // Update
 
 // Delete
