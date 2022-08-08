@@ -1,5 +1,7 @@
 /* Le model Sauce.js crée un schéma de données pour les sauces */
 
+/* Import et appel */
+
 // Importe le package mongoose de mongoDB dans une constante.
 const mongoose = require("mongoose");
 
@@ -20,13 +22,13 @@ const sauceSchema = mongoose.Schema({
   /* nombre entre 1 et 10 décrivant la sauce */
   heat: { type: Number, required: true },
   /* nombre d'utilisateurs qui aiment (= likent) la sauce */
-  likes: { type: Number, required: true, default: 0},
+  likes: { type: Number, default: 0},
   /* nombre d'utilisateurs qui n'aiment pas (= dislike) la sauce */
-  dislikes: { type: Number, required: true, default: 0 },
+  dislikes: { type: Number, default: 0 },
   /* tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce */
-  usersLiked: { type: [String], req: true, default: [] },
+  usersLiked: { type: [String], default: [] },
   /* tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce */
-  usersDisliked: { type: [String], req: true, default: [] },
+  usersDisliked: { type: [String], default: [] },
 });
 
 // Exporte le schéma en utilisant la méthode .model du package mongoose;

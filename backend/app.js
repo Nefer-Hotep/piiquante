@@ -1,6 +1,7 @@
 /* Créer une application express */
 
-/* Appel des packages */
+/* Import et appel */
+
 // Importe express dans une constante depuis le package.json.
 const express = require("express");
 // Importe depuis le package.json mongoose de mongoDB dans une constante.
@@ -45,7 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Parse les requêtes entrantes en json A REVOIR !!!
+// Parse les requêtes entrantes en json.
 app.use(express.json());
 
 // Racine des routes de CRUD

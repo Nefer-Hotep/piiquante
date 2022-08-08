@@ -1,6 +1,7 @@
 /* sauces.js créer une routes pour les sauces de l'application. */
 
 /* Import et appel */
+
 // Import d'express dans une constante depuis le package.json.
 const express = require("express");
 // Crée un router en utilisant la methode .Router() d'express.
@@ -13,17 +14,19 @@ const multer = require("../middleware/multer-config");
 const saucesCtrl = require("../controllers/sauces");
 
 /* Gestion des routes */
+
 // CRUD
 // Create Read Update Delete
 
 // Create
 router.post("/", auth, multer, saucesCtrl.createSauce);
+router.post("/:id/like", auth, saucesCtrl.likeSauce);
 // Read (One)
 router.get("/:id", auth, saucesCtrl.getOneSauce);
 // Update
-
+router.put("/:id", auth, multer, saucesCtrl.modifySauce);
 // Delete
-
+router.delete("/:id", auth, saucesCtrl.deleteSauce);
 // Read (all)
 router.get("/", auth, saucesCtrl.getAllSauces);
 
