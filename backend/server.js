@@ -2,11 +2,13 @@
 
 // Importe le package http de NodeJS
 const http = require("http");
-// Importe l'application Express dans une constante app
+// Appel dotenv pour avoir accés aux variables d'environement.
+require("dotenv").config()
+// Importe l'application Express dans une constante app.
 const app = require("./app");
 
 // La fonction normalizePort renvoie un port valide,
-// qu'il soit fourni sous la forme d'un numéro ou d'une chaine de caractère
+// qu'il soit fourni sous la forme d'un numéro ou d'une chaine de caractère.
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
 
