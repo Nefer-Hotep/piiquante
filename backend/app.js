@@ -14,7 +14,8 @@ const mongoose = require("mongoose");
 const saucesRoutes = require("./routes/sauces");
 // Importe le router de user.js
 const userRoutes = require("./routes/user");
-// ????
+// Appel le module "path" de node. Il fournit des utilitaires pour travailler avec 
+// les chemins de fichiers et de répertoires. 
 const path = require("path");
 
 // Indique à app d'utiliser express.
@@ -33,8 +34,8 @@ mongoose
     `mongodb+srv://${api_key}@cluster0.8xpgh.mongodb.net/?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+  .then(() => console.log("Successful connection to MongoDB"))
+  .catch(() => console.log("Connection to MongoDB failed"));
 
 /* Création des Middlewares */
 // Définie les headers (en-têtes) pour les autorisations CORS. ??????
@@ -51,7 +52,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
-  //next() renvoie la réponse.
+  // next() renvoie la réponse.
   next();
 });
 

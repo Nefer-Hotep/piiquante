@@ -21,7 +21,7 @@ exports.signup = (req, res, next) => {
       user
         // Sauvegarde + gestion des status.
         .save()
-        .then(() => res.status(201).json({ message: "Utilisateur crée !" }))
+        .then(() => res.status(201).json({ message: "User created !" }))
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
@@ -35,7 +35,7 @@ exports.login = (req, res, next) => {
         // Si ne trouve pas d'utilisateur erreur 401 + message.
         res
           .status(401)
-          .json({ message: "Paire identifiant/mot de passe incorrecte" });
+          .json({ message: "Incorrect username/password" });
       } else {
         // Compare le mdp reçu puis avec celui stocké dans la bdd.
         bcrypt
@@ -45,7 +45,7 @@ exports.login = (req, res, next) => {
               // Si le mdp et invalide erreur 401 + message
               res
                 .status(401)
-                .json({ message: "Paire identifiant/mot de passe incorrecte" });
+                .json({ message: "Incorrect username/password" });
             } else {
               // Si le mdp est valide code 200 + objet avec les info requis pour l'auth.
               res.status(200).json({

@@ -35,13 +35,16 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
+  // On cherche l'objet dans la bdd et vérifie la provenance de la requête.
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const userId = req.body.userId;
       const userLikes = req.body.like;
+      // Evalue l'expression userLikes et exécute les instructions correspondantes.
       switch (userLikes) {
-        // Ajout d'un like
+        // Le cas 1 ajoute un like
         case 1:
+          // Vérifie si un like existe déjà dans l'objet.userliked. Si il ne trouve rien incrémente un like.
           if (!sauce.usersLiked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -51,13 +54,14 @@ exports.likeSauce = (req, res, next) => {
               }
             )
               .then(() => {
-                res.status(201).json({ message: "Like +1 !" });
+                res.status(201).json({ message: "Like added !" });
               })
               .catch((error) => res.status(400).JSON({ error }));
           }
           break;
-        // Retour à 0 du like ou dislike
+        // Le cas 0 retourne le like ou le dislike à 0
         case 0:
+          // Si un like est présent dans l'objet.userLiked retire le like.
           if (sauce.usersLiked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -67,10 +71,12 @@ exports.likeSauce = (req, res, next) => {
               }
             )
               .then(() => {
-                res.status(201).json({ message: "Like -1 !" });
+                res.status(201).json({ message: "Like removed !" });
               })
               .catch((error) => res.status(400).JSON({ error }));
-          } else if (sauce.usersDisliked.includes(userId)) {
+          }
+          // Si un dislike est présent dans l'objet.userLiked retire le dislike.
+          else if (sauce.usersDisliked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
               {
@@ -79,13 +85,14 @@ exports.likeSauce = (req, res, next) => {
               }
             )
               .then(() => {
-                res.status(201).json({ message: "Dislike -1 !" });
+                res.status(201).json({ message: "Dislike removed !" });
               })
               .catch((error) => res.status(400).JSON({ error }));
           }
           break;
-        // Ajout d'un dislike
+        // Le cas -1 ajoute un dislike.
         case -1:
+          // Vérifie si un dislike existe déjà dans l'objet.userDisliked. Si il ne trouve rien incrémente un dislike.
           if (!sauce.usersDisliked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -95,7 +102,7 @@ exports.likeSauce = (req, res, next) => {
               }
             )
               .then(() => {
-                res.status(201).json({ message: "Dislike +1 !" });
+                res.status(201).json({ message: "Dislike added !" });
               })
               .catch((error) => res.status(400).JSON({ error }));
           }
@@ -143,7 +150,7 @@ exports.modifySauce = (req, res, next) => {
     .then((sauce) => {
       // Si la requête provient d'un utilisateur non-autorisé un message est transmis.
       if (sauce.userId != req.auth.userId) {
-        res.status(401).json({ message: "Utilisateur non-autorisé !" });
+        res.status(403).json({ message: "403: unauthorized request." });
       }
       // Si la requête est valide on met à jour la modification.
       else {
@@ -152,7 +159,7 @@ exports.modifySauce = (req, res, next) => {
           { _id: req.params.id },
           { ...sauceObject, _id: req.params.id }
         )
-          .then(() => res.status(200).json({ message: "Sauce modifié !" }))
+          .then(() => res.status(200).json({ message: "Sauce modified !" }))
           .catch((error) => {
             res.status(401).json({ error });
           });
@@ -170,7 +177,7 @@ exports.deleteSauce = (req, res, next) => {
     .then((sauce) => {
       // Si la requête provient d'un utilisateur non-autorisé un message est transmis.
       if (sauce.userId != req.auth.userId) {
-        res.status(401).json({ message: "Utilisateur non-autorisé !" });
+        res.status(403).json({ message: "403: unauthorized request." });
       } else {
         // Si la requête est valide on supprime l'objet avec son image.
 
@@ -180,7 +187,7 @@ exports.deleteSauce = (req, res, next) => {
         fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => {
-              res.status(200).json({ message: "Sauce supprimé !" });
+              res.status(200).json({ message: "Sauce deleted !" });
             })
             .catch((error) => res.status(401).json({ error }));
         });

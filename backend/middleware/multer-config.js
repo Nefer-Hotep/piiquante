@@ -22,13 +22,13 @@ const storage = multer.diskStorage({
   // indique quel nom de fichier utilisé.
   filename: (req, file, callback) => {
     // génère le nouveau nom pour le fichier en remplacant les espaces par des _ (empèche certaine erreur serveur).
-    const name = file.originalname.split(" ").join("_");/*????*/
+    const name = file.originalname.slice(0, 4).split(" ").join("_");
     // applique une extansion aux fichiers utilisant le dictionaire crée.
     const extension = MIME_TYPES[file.mimetype];
-    // appel le callback avec le nom, la date et .extansion (ex: mon_image050820221245.jpg)
+    // appel le callback avec le nom, la date et .extansion (ex: mon_image050820221245.jpg).
     callback(null, name + Date.now() + "." + extension);
   },
 });
 
-// Exporte le middleware multer configuré avec les paramètres de storage dans un fichier unique d'image
+// Exporte le middleware multer configuré avec les paramètres de storage dans un fichier unique d'image.
 module.exports = multer({ storage }).single("image");
