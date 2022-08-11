@@ -1,8 +1,8 @@
 /* Créer un server NodeJS */
 
-// Importe le package http de NodeJS
+// Importe le package http de NodeJS.
 const http = require("http");
-// Appel dotenv pour avoir accés aux variables d'environement.
+// Appel dotenv pour avoir accès aux variables d'environnement.
 require("dotenv").config()
 // Importe l'application Express dans une constante app.
 const app = require("./app");
@@ -22,11 +22,11 @@ const normalizePort = (val) => {
 };
 const port = normalizePort(process.env.PORT || "3000");
 
-// Indique sur quel port l'app doit s'éxécuter
+// Indique sur quel port l'app doit s'exécuter.
 app.set("port", port);
 
-// la fonction errorHandler recherche les différentes erreurs et les gère de manière appropriée.
-// Elle est ensuite enregistrée dans le serveur  
+// La fonction errorHandler recherche les différentes erreurs et les gère de manière appropriée.
+// Elle est ensuite enregistrée dans le serveur.  
 const errorHandler = error => {
     if (error.syscall !== 'listen') {
       throw error;
@@ -47,8 +47,8 @@ const errorHandler = error => {
     }
   };
 
-// Créer un server avec l'objet http et avec un agument
-// app est appellé à chaque requête reçu par le server
+// Créer un serveur avec l'objet http et avec un argument
+// app est appellé à chaque requête reçue par le serveur.
 const server = http.createServer(app);
 
 // Un écouteur d'évènements est ajouté.
@@ -60,5 +60,5 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-// Ecoute les requêtes envoyées au server sur le port.
+// Écoute les requêtes envoyées au serveur sur le port.
 server.listen(port);

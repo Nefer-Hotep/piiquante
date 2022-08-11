@@ -4,13 +4,13 @@
 
 // Import d'express dans une constante depuis le package.json.
 const express = require("express");
-// Crée un router en utilisant la methode .Router() d'express.
+// Crée un router en utilisant la méthode .Router() d'express.
 const router = express.Router();
 // Import du middleware de gestion d'autorisation.
 const auth = require("../middleware/auth");
 // Import de la gestion des fichiers images avec les configurations de multer.
 const multer = require("../middleware/multer-config");
-// Appel le controller pour associer les fonction aux différentes routes
+// Appel le controller pour associer les fonctions aux différentes routes.
 const saucesCtrl = require("../controllers/sauces");
 
 /* Gestion des routes */

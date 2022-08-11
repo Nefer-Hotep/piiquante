@@ -2,7 +2,7 @@
 
 /* Import et appel */
 
-// Import du model qu'on as crée qui utilise mongoose.
+// Import du modèle qu'on a créé qui utilise mongoose.
 const Sauce = require("../models/Sauce");
 // Import de fs (file system) pour avoir accès aux modifications de fichier sur le système.
 const fs = require("fs");
@@ -19,7 +19,7 @@ exports.createSauce = (req, res, next) => {
   // Supprime dans l'objet le champ .userId car il a été créer par l'utilisateur(non sécurisé).
   delete sauceObject._userId;
 
-  // Création d'un nouvel objet sauce avec la décompsition de sauceObject, le nouvel userId authentifié et le chemin de l'image.
+  // Création d'un nouvel objet sauce avec la décomposition de sauceObject, le nouvel userId authentifié et le chemin de l'image.
   const sauce = new Sauce({
     ...sauceObject,
     userId: req.auth.userId,
@@ -40,11 +40,11 @@ exports.likeSauce = (req, res, next) => {
     .then((sauce) => {
       const userId = req.body.userId;
       const userLikes = req.body.like;
-      // Evalue l'expression userLikes et exécute les instructions correspondantes.
+      // Évalue l'expression userLikes et exécute les instructions correspondantes.
       switch (userLikes) {
-        // Le cas 1 ajoute un like
+        // Le cas 1 ajoute un like.
         case 1:
-          // Vérifie si un like existe déjà dans l'objet.userliked. Si il ne trouve rien incrémente un like.
+          // Vérifie si un like existe déjà dans l'objet.userliked. S'il ne trouve rien incrémente un like.
           if (!sauce.usersLiked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -61,7 +61,7 @@ exports.likeSauce = (req, res, next) => {
           break;
         // Le cas 0 retourne le like ou le dislike à 0
         case 0:
-          // Si un like est présent dans l'objet.userLiked retire le like.
+          // Si un like est présent dans l'objet .userLiked retire le like.
           if (sauce.usersLiked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -75,7 +75,7 @@ exports.likeSauce = (req, res, next) => {
               })
               .catch((error) => res.status(400).JSON({ error }));
           }
-          // Si un dislike est présent dans l'objet.userLiked retire le dislike.
+          // Si un dislike est présent dans l'objet .userLiked retire le dislike.
           else if (sauce.usersDisliked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -92,7 +92,7 @@ exports.likeSauce = (req, res, next) => {
           break;
         // Le cas -1 ajoute un dislike.
         case -1:
-          // Vérifie si un dislike existe déjà dans l'objet.userDisliked. Si il ne trouve rien incrémente un dislike.
+          // Vérifie si un dislike existe déjà dans l'objet.userDisliked. S'il ne trouve rien incrémente un dislike.
           if (!sauce.usersDisliked.includes(userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -132,7 +132,7 @@ exports.modifySauce = (req, res, next) => {
   // Si un fichier est présent ou pas le format de la requête ne sera pas le même.
   // Ici on vérifie si un fichier est présent ou non.
   const sauceObject = req.file
-    ? // Si il y a un champ file, on doit récupéré l'objet et parse la chaine de caractère.
+    ? // S'il y a un champ file, on doit récupérer l'objet et parse la chaine de caractère.
       {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -143,12 +143,12 @@ exports.modifySauce = (req, res, next) => {
       {
         ...req.body,
       };
-  // On supprime l'_useId de la requête pour éviter les modifications d'objets par d'autre utilisateurs.
+  // On supprime l'_useId de la requête pour éviter les modifications d'objets par d'autres utilisateurs.
   delete sauceObject._userId;
   // On cherche l'objet dans la bdd et vérifie la provenance de la requête.
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
-      // Si la requête provient d'un utilisateur non-autorisé un message est transmis.
+      // Si la requête provient d'un utilisateur non autorisé un message est transmis.
       if (sauce.userId != req.auth.userId) {
         res.status(403).json({ message: "403: unauthorized request." });
       }
@@ -175,16 +175,17 @@ exports.deleteSauce = (req, res, next) => {
   // Vérifie l'utilisateur qui supprime l'objet.
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
-      // Si la requête provient d'un utilisateur non-autorisé un message est transmis.
+      // Si la requête provient d'un utilisateur non autorisé un message est transmis.
       if (sauce.userId != req.auth.userId) {
         res.status(403).json({ message: "403: unauthorized request." });
       } else {
         // Si la requête est valide on supprime l'objet avec son image.
 
-        //
+        // Récupère le nom de fichier des images.
         const filename = sauce.imageUrl.split("/images/")[1];
-        // Appel de la méthode .unlink de fs
+        // Appel de la méthode .unlink de fs pour supprimer le fichier de manière asynchrone.
         fs.unlink(`images/${filename}`, () => {
+          // Supprime l'objet de la bdd.
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => {
               res.status(200).json({ message: "Sauce deleted !" });

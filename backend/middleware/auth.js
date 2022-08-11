@@ -1,4 +1,4 @@
-/* Vérifie les informations d'authentification envoyé par le client */
+/* Vérifie les informations d'authentification envoyée par le client */
 
 // Import depuis le package.json de jsonwebtoken pour la création et la vérification des tokens.
 const jwt = require("jsonwebtoken");
@@ -21,6 +21,6 @@ module.exports = (req, res, next) => {
     next();
   } catch (error) {
     // Récupère l'erreur avec un statut 401 + erreur.
-    res.status(403).json({ error });/* ???? 403:unauthorized request */ 
+    res.status(401).json({ error }); 
   }
 };

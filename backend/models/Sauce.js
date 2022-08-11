@@ -1,4 +1,4 @@
-/* Le model Sauce.js crée un schéma de données pour les sauces */
+/* Le modèle Sauce.js crée un schéma de données pour les sauces */
 
 /* Import et appel */
 
@@ -32,5 +32,5 @@ const sauceSchema = mongoose.Schema({
 });
 
 // Exporte le schéma en utilisant la méthode .model du package mongoose;
-// l'argument 'Sauce' utilise le nom du model et l'option utilise le schéma crée sauceSchema
+// l'argument 'Sauce' utilise le nom du .model et l'option utilise le schéma crée sauceSchema
 module.exports = mongoose.model("Sauce", sauceSchema);
