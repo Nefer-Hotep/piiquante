@@ -40,73 +40,80 @@ exports.likeSauce = (req, res, next) => {
     .then((sauce) => {
       const userId = req.body.userId;
       const userLikes = req.body.like;
-      // Évalue l'expression userLikes et exécute les instructions correspondantes.
-      switch (userLikes) {
-        // Le cas 1 ajoute un like.
-        case 1:
-          // Vérifie si un like existe déjà dans l'objet.userliked. S'il ne trouve rien incrémente un like.
-          if (!sauce.usersLiked.includes(userId)) {
-            Sauce.updateOne(
-              { _id: req.params.id },
-              {
-                $inc: { likes: +1 },
-                $push: { usersLiked: userId },
-              }
-            )
-              .then(() => {
-                res.status(201).json({ message: "Like added !" });
-              })
-              .catch((error) => res.status(400).JSON({ error }));
-          }
-          break;
-        // Le cas 0 retourne le like ou le dislike à 0
-        case 0:
-          // Si un like est présent dans l'objet .userLiked retire le like.
-          if (sauce.usersLiked.includes(userId)) {
-            Sauce.updateOne(
-              { _id: req.params.id },
-              {
-                $inc: { likes: -1 },
-                $pull: { usersLiked: userId },
-              }
-            )
-              .then(() => {
-                res.status(201).json({ message: "Like removed !" });
-              })
-              .catch((error) => res.status(400).JSON({ error }));
-          }
-          // Si un dislike est présent dans l'objet .userLiked retire le dislike.
-          else if (sauce.usersDisliked.includes(userId)) {
-            Sauce.updateOne(
-              { _id: req.params.id },
-              {
-                $inc: { dislikes: -1 },
-                $pull: { usersDisliked: userId },
-              }
-            )
-              .then(() => {
-                res.status(201).json({ message: "Dislike removed !" });
-              })
-              .catch((error) => res.status(400).JSON({ error }));
-          }
-          break;
-        // Le cas -1 ajoute un dislike.
-        case -1:
-          // Vérifie si un dislike existe déjà dans l'objet.userDisliked. S'il ne trouve rien incrémente un dislike.
-          if (!sauce.usersDisliked.includes(userId)) {
-            Sauce.updateOne(
-              { _id: req.params.id },
-              {
-                $inc: { dislikes: +1 },
-                $push: { usersDisliked: userId },
-              }
-            )
-              .then(() => {
-                res.status(201).json({ message: "Dislike added !" });
-              })
-              .catch((error) => res.status(400).JSON({ error }));
-          }
-          break;
+      // Si la requête provient d'un utilisateur non autorisé un message est transmis.
+      if (sauce.userId != req.auth.userId) {
+        res.status(403).json({ message: "403: unauthorized request." });
+      }
+      // Si la requête est valide on met à jour le like.
+      else {
+        // Évalue l'expression userLikes et exécute les instructions correspondantes.
+        switch (userLikes) {
+          // Le cas 1 ajoute un like.
+          case 1:
+            // Vérifie si un like existe déjà dans l'objet.userliked. S'il ne trouve rien incrémente un like.
+            if (!sauce.usersLiked.includes(userId)) {
+              Sauce.updateOne(
+                { _id: req.params.id },
+                {
+                  $inc: { likes: +1 },
+                  $push: { usersLiked: userId },
+                }
+              )
+                .then(() => {
+                  res.status(201).json({ message: "Like added !" });
+                })
+                .catch((error) => res.status(400).JSON({ error }));
+            }
+            break;
+          // Le cas 0 retourne le like ou le dislike à 0
+          case 0:
+            // Si un like est présent dans l'objet .userLiked retire le like.
+            if (sauce.usersLiked.includes(userId)) {
+              Sauce.updateOne(
+                { _id: req.params.id },
+                {
+                  $inc: { likes: -1 },
+                  $pull: { usersLiked: userId },
+                }
+              )
+                .then(() => {
+                  res.status(201).json({ message: "Like removed !" });
+                })
+                .catch((error) => res.status(400).JSON({ error }));
+            }
+            // Si un dislike est présent dans l'objet .userLiked retire le dislike.
+            else if (sauce.usersDisliked.includes(userId)) {
+              Sauce.updateOne(
+                { _id: req.params.id },
+                {
+                  $inc: { dislikes: -1 },
+                  $pull: { usersDisliked: userId },
+                }
+              )
+                .then(() => {
+                  res.status(201).json({ message: "Dislike removed !" });
+                })
+                .catch((error) => res.status(400).JSON({ error }));
+            }
+            break;
+          // Le cas -1 ajoute un dislike.
+          case -1:
+            // Vérifie si un dislike existe déjà dans l'objet.userDisliked. S'il ne trouve rien incrémente un dislike.
+            if (!sauce.usersDisliked.includes(userId)) {
+              Sauce.updateOne(
+                { _id: req.params.id },
+                {
+                  $inc: { dislikes: +1 },
+                  $push: { usersDisliked: userId },
+                }
+              )
+                .then(() => {
+                  res.status(201).json({ message: "Dislike added !" });
+                })
+                .catch((error) => res.status(400).JSON({ error }));
+            }
+            break;
+        }
       }
     })
     .catch((error) => {
