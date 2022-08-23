@@ -1,4 +1,4 @@
-/* Middleware de configuration de multer qui permet de gérer les fichers entrant et sortant */
+/* Middleware de configuration de multer qui permet de gérer les fichiers entrant et sortant */
 
 /* Import et appel */
 // Import de multer depuis le package.json.
@@ -6,7 +6,7 @@ const multer = require("multer");
 
 /* Création d'un objet de configuration de multer. */
 
-// Crée un dictionaire pour les extension de fichier.
+// Crée un dictionnaire pour les extension de fichier.
 const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
@@ -19,16 +19,19 @@ const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, "images");
   },
-  // indique quel nom de fichier utilisé.
+  // Indique quel nom de fichier utilisé.
   filename: (req, file, callback) => {
-    // génère le nouveau nom pour le fichier en remplacant les espaces par des _ (empèche certaine erreur serveur).
-    const name = file.originalname.split(" ").join("_");/*????*/
-    // applique une extansion aux fichiers utilisant le dictionaire crée.
+    // Génère le nouveau nom pour le fichier en remplaçant 
+    // les espaces par des _ (empèche certaines erreurs serveur).
+    let name = file.originalname.split(" ").join("_");
+    name = name.substring(0, name.lastIndexOf("."));
+
+    // Applique une extension aux fichiers utilisant le dictionnaire crée.
     const extension = MIME_TYPES[file.mimetype];
-    // appel le callback avec le nom, la date et .extansion (ex: mon_image050820221245.jpg)
+    // Appel le callback avec le nom, la date et .extension (ex: mon_image050820221245.jpg).
     callback(null, name + Date.now() + "." + extension);
   },
 });
 
-// Exporte le middleware multer configuré avec les paramètres de storage dans un fichier unique d'image
+// Exporte le middleware multer configuré avec les paramètres de storage dans un fichier unique d'image.
 module.exports = multer({ storage }).single("image");
